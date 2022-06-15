@@ -6,14 +6,9 @@ function Read-InputBoxDialog([string]$Message, [string]$WindowTitle, [string]$De
     return [Microsoft.VisualBasic.Interaction]::InputBox($Message, $WindowTitle, $DefaultText)
 }
 
-try {
-    Get-AzureADUser -SearchString bclinton | Out-Null
-}
-catch {
     Install-module AzureAD -Force
-    Import-module AzureAD
+    Import-module AzureAD -force
     Connect-AzureAD
-}
 
 $groups = Get-AzureADGroup -SearchString 'Intune' -All $true | Where-Object { $_.DisplayName.EndsWith('Compute') } | Select-Object ObjectID,DisplayName
 $array = @(foreach ($name in $groups) {
